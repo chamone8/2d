@@ -110,6 +110,3 @@ func gravity(delta: float) -> void:
 		velocity.y += delta * player_gravity
 		if velocity.y >= player_gravity:
 			velocity.y = player_gravity
-	
-func _ready():
-	pass

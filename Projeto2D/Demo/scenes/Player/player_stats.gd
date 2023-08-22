@@ -2,8 +2,11 @@ extends Node
 class_name PlayerStats
 
 export(NodePath) var player_path
+export(NodePath) var collision_area_path
 
 onready var player = get_node(player_path)
+onready var collision_area = get_node(collision_area_path)
+onready var invencibility_timer = get_node("InvencibilityTimer")
 
 var shielding: bool = false
 
@@ -87,7 +90,7 @@ func update_mana(type: String, value: int) -> void:
 
 func _process(_delta) -> void:
 	if Input.is_action_just_pressed("ui_select"):
-		update_health("Decrease", 5)
+		pass #update_health("Decrease", 5)
 			
 			
 func verify_shield(value: int) -> void:
@@ -103,3 +106,8 @@ func verify_shield(value: int) -> void:
 func on_Collision_area_entered(area):
 	if area.name == "EnemyAttackArea":
 		update_health("Decrease", area.damage)
+		collision_area.set_deferred("monitoring", false)
+		invencibility_timer.start(area.invencibility_timer)
+
+func on_Invencibility_timer_timeout() -> void:
+	collision_area.set_deferred("monitoring", true)
